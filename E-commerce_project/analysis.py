@@ -93,7 +93,32 @@ total_orders=df["Order_ID"].nunique()
 correlation= df["Quantity"].corr(df["total_amount"])
 #print("correlation::",correlation)
 
+#13) quarter=This extracts the quarter(map from jan-mar,arp-june etc..) number from each date.
+df["Quarter"] = df["Order_Date"].dt.quarter
+quarter_sales = df.groupby("Quarter")["total_amount"].sum()
+#print(quarter_sales)
 
+#14) What percentage of revenue comes from Electronics?
+
+category_revenue = df.groupby("Category")["total_amount"].sum()
+total_revenue = df["total_amount"].sum()
+
+electronics_percentage = (category_revenue["Electronics"] / total_revenue) * 100
+#print(electronics_percentage)
+
+#15)Which city prefers COD more?
+cod_city = df[df["Payment_Method"] == "COD"]["City"].value_counts()
+#print(cod_city)
+
+#16) Which month had the lowest sales?
+df["Month"] = df["Order_Date"].dt.month
+monthly_sales = df.groupby("Month")["total_amount"].sum()
+lowest_month = monthly_sales.idxmin()
+#print(lowest_month)
+
+#17)Is there seasonality in this data?
+quarter_sales = df.groupby(df["Order_Date"].dt.quarter)["total_amount"].sum()
+print(quarter_sales)
 
 
 
